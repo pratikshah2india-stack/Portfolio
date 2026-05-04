@@ -1,16 +1,51 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useUserAuth } from '../context/UserAuthContext';
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
+  const { isUserLoggedIn, currentUser, userLogout } = useUserAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const handleAdminLogout = () => { logout(); navigate('/'); };
+  const handleUserLogout  = () => { userLogout(); navigate('/'); };
+
+  const NavLinks = ({ onClick }) => (
+    <>
+      <a href="/#projects" onClick={onClick}>Projects</a>
+      <a href="/#skills"   onClick={onClick}>Skills</a>
+      <a href="/#about"    onClick={onClick}>About</a>
+      <a href="/#contact"  onClick={onClick}>Contact</a>
+
+      {/* Admin controls — only shown when logged in as admin */}
+      {isAuthenticated && (
+        <>
+          <Link to="/dashboard" onClick={onClick}>
+            <button className="btn-nav btn-nav-outline">Dashboard</button>
+          </Link>
+          <button className="btn-nav btn-nav-danger" onClick={handleAdminLogout}>Logout</button>
+        </>
+      )}
+
+      {/* User Sign In / Out */}
+      {!isAuthenticated && (
+        isUserLoggedIn ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+              👤 {currentUser?.name?.split(' ')[0]}
+            </span>
+            <button className="btn-nav btn-nav-danger" onClick={handleUserLogout}>Sign Out</button>
+          </div>
+        ) : (
+          <Link to="/user-login" onClick={onClick}>
+            <button className="btn-nav btn-nav-outline">Sign In</button>
+          </Link>
+        )
+      )}
+    </>
+  );
 
   return (
     <nav className="navbar">
@@ -26,23 +61,7 @@ const Navbar = () => {
         </button>
 
         <div className="navbar-links">
-          <a href="/#projects">Projects</a>
-          <a href="/#skills">Skills</a>
-          <a href="/#contact">Contact</a>
-          {isAuthenticated ? (
-            <>
-              <Link to="/dashboard">
-                <button className="btn-nav btn-nav-outline">Dashboard</button>
-              </Link>
-              <button className="btn-nav btn-nav-danger" onClick={handleLogout}>
-                Logout
-              </button>
-            </>
-          ) : (
-            <Link to="/login">
-              <button className="btn-nav btn-nav-outline">Admin Login</button>
-            </Link>
-          )}
+          <NavLinks />
         </div>
       </div>
 
@@ -51,17 +70,7 @@ const Navbar = () => {
           background: 'var(--bg-secondary)', borderTop: '1px solid var(--border)',
           padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem'
         }}>
-          <a href="/#projects" onClick={() => setMenuOpen(false)}>Projects</a>
-          <a href="/#skills" onClick={() => setMenuOpen(false)}>Skills</a>
-          <a href="/#contact" onClick={() => setMenuOpen(false)}>Contact</a>
-          {isAuthenticated ? (
-            <>
-              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
-              <button className="btn-nav btn-nav-danger" onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <Link to="/login" onClick={() => setMenuOpen(false)}>Admin Login</Link>
-          )}
+          <NavLinks onClick={() => setMenuOpen(false)} />
         </div>
       )}
     </nav>
@@ -69,3 +78,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

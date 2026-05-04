@@ -273,6 +273,16 @@ input, textarea, button, select { font-family: inherit; }
 .stat-chip-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 .badge-read { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.7rem; font-weight: 700; }
 
+/* ===== SOCIAL LINKS ===== */
+.social-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 1.1rem; border-radius: 8px;
+  border: 1px solid var(--border); color: var(--text-secondary);
+  font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
+  background: var(--bg-card);
+}
+.social-link:hover { color: var(--accent-light); border-color: var(--border-hover); background: var(--accent-glow); transform: translateY(-2px); }
+
 /* ===== FOOTER ===== */
 .footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
 .footer span { color: var(--accent-light); font-weight: 600; }

@@ -10,7 +10,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow any localhost port in development, and the configured CLIENT_URL in production
+    const allowed = [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
+    if (!origin || allowed.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -20,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/messages', require('./routes/messages'));
+app.use('/api/user', require('./routes/userAuth'));
 
 // Health check
 app.get('/', (req, res) => {

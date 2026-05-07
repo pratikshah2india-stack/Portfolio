@@ -63,7 +63,9 @@ const UserLogin = () => {
       setCountdown(60);
       setMsg({ type: 'success', text: `OTP sent to ${regForm.email}. Check your inbox!` });
     } catch (err) {
-      setMsg({ type: 'error', text: err.response?.data?.message || 'Registration failed.' });
+      const d = err.response?.data;
+      const text = d?.errors?.[0]?.msg || d?.message || d?.error || err.message || 'Registration failed.';
+      setMsg({ type: 'error', text });
     } finally { setLoading(false); }
   };
 

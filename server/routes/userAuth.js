@@ -54,8 +54,11 @@ router.post('/register', [
 
     res.status(201).json({ message: 'OTP sent to your email. Please verify.', email });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('❌ Register error:', error.name, '-', error.message);
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Email already registered. Please login.' });
+    }
+    res.status(500).json({ message: error.message || 'Server error' });
   }
 });
 

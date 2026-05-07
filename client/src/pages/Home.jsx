@@ -65,7 +65,7 @@ const Home = () => {
             <div className="hero-badge animate-fadeInUp">
               <span></span> Available for Hire
             </div>
-            <h1 className="animate-fadeInUp delay-1">
+            <h1 className="hero-title animate-fadeInUp delay-1">
               Hi, I'm Kailash Prasad Shah.<br />I Build for the Web.
             </h1>
             <p className="hero-tagline animate-fadeInUp delay-2">
